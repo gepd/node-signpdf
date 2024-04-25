@@ -1,7 +1,7 @@
 import {
     Signer,
     SignPdfError,
-} from '@signpdf/utils';
+} from './index';
 import signpdf from './signpdf';
 
 describe('Test signing', () => {

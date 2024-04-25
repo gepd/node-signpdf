@@ -7,17 +7,17 @@ exports.SignPdf = void 0;
 Object.defineProperty(exports, "SignPdfError", {
   enumerable: true,
   get: function () {
-    return _utils.SignPdfError;
+    return _index.SignPdfError;
   }
 });
 Object.defineProperty(exports, "Signer", {
   enumerable: true,
   get: function () {
-    return _utils.Signer;
+    return _index.Signer;
   }
 });
 exports.default = void 0;
-var _utils = require("@signpdf/utils");
+var _index = require("./index");
 /**
  * @typedef {object} SignerOptions
  * @prop {string} [passphrase]
@@ -39,17 +39,17 @@ class SignPdf {
   async sign(pdfBuffer, forhash, signature = null, phlength = 0, bRange = null) {
     if (forhash) {
       if (!(pdfBuffer instanceof Buffer)) {
-        throw new _utils.SignPdfError('PDF expected as Buffer.', _utils.SignPdfError.TYPE_INPUT);
+        throw new _index.SignPdfError('PDF expected as Buffer.', _index.SignPdfError.TYPE_INPUT);
       }
-      let pdf = (0, _utils.removeTrailingNewLine)((0, _utils.convertBuffer)(pdfBuffer, 'PDF'));
+      let pdf = (0, _index.removeTrailingNewLine)((0, _index.convertBuffer)(pdfBuffer, 'PDF'));
 
       // Find the ByteRange placeholder.
       const {
         byteRangePlaceholder,
         byteRangePlaceholderPosition
-      } = (0, _utils.findByteRange)(pdf);
+      } = (0, _index.findByteRange)(pdf);
       if (!byteRangePlaceholder) {
-        throw new _utils.SignPdfError('No ByteRangeStrings found within PDF buffer.', _utils.SignPdfError.TYPE_PARSE);
+        throw new _index.SignPdfError('No ByteRangeStrings found within PDF buffer.', _index.SignPdfError.TYPE_PARSE);
       }
 
       // Calculate the actual ByteRange that needs to replace the placeholder.

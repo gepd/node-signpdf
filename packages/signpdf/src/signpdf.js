@@ -4,7 +4,7 @@ import {
     findByteRange,
     SignPdfError,
     Signer,
-} from '@signpdf/utils';
+} from './index';
 
 export {Signer, SignPdfError};
 

@@ -4,7 +4,6 @@ import {findByteRange} from './findByteRange';
 import {SignPdfError} from './SignPdfError';
 import {Signer} from './Signer';
 
-export * from './const';
 export {Signer, SignPdfError};
 
 /**

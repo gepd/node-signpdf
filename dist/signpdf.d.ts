@@ -12,11 +12,11 @@ export class SignPdf {
    * @param {number} phlength
    * @param {number} bRange
    */
-    sign(pdfBuffer: Buffer | Uint8Array | string, forhash: boolean, signature?: ArrayBufferLike, phlength?: number, bRange?: number): Promise<Uint8Array | Buffer | {
+    sign(pdfBuffer: Buffer | Uint8Array | string, forhash: boolean, signature?: ArrayBufferLike, phlength?: number, bRange?: number): Uint8Array | Buffer | {
         pdf: Buffer;
         placeholderLength: number;
         byteRange1: number;
-    }>;
+    };
 }
 declare const _default: SignPdf;
 export default _default;

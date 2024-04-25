@@ -24,7 +24,7 @@ export class SignPdf {
    * @param {number} phlength
    * @param {number} bRange
    */
-    async sign(
+    sign(
         pdfBuffer,
         forhash,
         signature = null,
@@ -86,6 +86,7 @@ export class SignPdf {
                 byteRange1: byteRange[1],
             };
         }
+
         let pdf = pdfBuffer;
 
         let internalSignature = Buffer.from(signature).toString('hex'); // Store the HEXified signature. At least useful in tests.

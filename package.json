@@ -10,8 +10,8 @@
   "engines": {
     "node": ">=12"
   },
-  "main": "dist/signpdf.js",
-  "types": "dist/signpdf.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "build": "yarn build:clean && yarn build:compile && yarn build:types",

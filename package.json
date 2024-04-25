@@ -11,6 +11,8 @@
   "engines": {
     "node": ">=12"
   },
+  "main": "./packages/signpdf/dist/signpdf.js",
+  "types": "./packages/signpdf/dist/signpdf.d.ts",
   "scripts": {
     "prepare": "husky install",
     "build": "lerna run build",

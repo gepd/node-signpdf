@@ -78,14 +78,14 @@ class SignPdf {
       };
     }
     let pdf = pdfBuffer;
-    let _signature = Buffer.from(signature).toString('hex'); // Store the HEXified signature. At least useful in tests.
-    this.lastSignature = _signature;
+    let internalSignature = Buffer.from(signature).toString('hex'); // Store the HEXified signature. At least useful in tests.
+    this.lastSignature = internalSignature;
 
     // Pad the signature with zeroes so the it is the same length as the placeholder
-    _signature += Buffer.from(String.fromCharCode(0).repeat((phlength - _signature.length) / 2)).toString('hex');
+    internalSignature += Buffer.from(String.fromCharCode(0).repeat((phlength - internalSignature.length) / 2)).toString('hex');
 
     // Place it in the document.
-    pdf = Buffer.concat([pdf.slice(0, bRange), Buffer.from(`<${_signature}>`), pdf.slice(bRange)]); // Magic. Done.
+    pdf = Buffer.concat([pdf.slice(0, bRange), Buffer.from(`<${internalSignature}>`), pdf.slice(bRange)]); // Magic. Done.
 
     return pdf;
   }

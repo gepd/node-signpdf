@@ -1,10 +1,8 @@
-import {
-    convertBuffer,
-    removeTrailingNewLine,
-    findByteRange,
-    SignPdfError,
-    Signer,
-} from './index';
+import {convertBuffer} from './convertBuffer';
+import {removeTrailingNewLine} from './removeTrailingNewLine';
+import {findByteRange} from './findByteRange';
+import {SignPdfError} from './SignPdfError';
+import {Signer} from './Signer';
 
 export {Signer, SignPdfError};
 

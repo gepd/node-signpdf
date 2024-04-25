@@ -24,7 +24,7 @@ export type SignerOptions = {
     passphrase?: string;
     asn1StrictParsing?: boolean;
 };
-import { Signer } from './index';
-import { SignPdfError } from './index';
+import { Signer } from './Signer';
+import { SignPdfError } from './SignPdfError';
 export { Signer, SignPdfError };
 //# sourceMappingURL=signpdf.d.ts.map

@@ -2,9 +2,6 @@
   "name": "@signpdf/signpdf",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/gepd/node-signpdf"
@@ -13,18 +10,38 @@
   "engines": {
     "node": ">=12"
   },
-  "main": "./packages/signpdf/dist/signpdf.js",
-  "types": "./packages/signpdf/dist/signpdf.d.ts",
+  "main": "dist/signpdf.js",
+  "types": "dist/signpdf.d.ts",
   "scripts": {
-    "prepare": "husky install",
-    "build": "lerna run build",
-    "lint": "lerna run lint",
-    "test": "lerna run test"
+    "test": "./node_modules/.bin/jest",
+    "build": "yarn build:clean && yarn build:compile && yarn build:types",
+    "lint": "eslint -c .eslintrc --ignore-path .eslintignore ./",
+    "build:clean": "rm -rf ./dist/*",
+    "build:compile": "babel ./src -d ./dist --ignore \"**/*.test.js\"",
+    "build:types": "yarn build:types:compile && yarn build:types:verify",
+    "build:types:compile": "tsc",
+    "build:types:verify": "tsd --files=index.test-d.ts"
   },
   "devDependencies": {
-    "coveralls": "^3.0.2",
-    "husky": "^7.0.4",
-    "lerna": "^7.3.0"
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.4.0",
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-syntax-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.4.2",
+    "@types/node": ">=12.0.0",
+    "@types/node-forge": "^1.2.1",
+    "assertion-error": "^1.1.0",
+    "babel-jest": "^27.3.1",
+    "babel-plugin-module-resolver": "^3.1.1",
+    "eslint": "^8.50.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-import-resolver-babel-module": "^5.3.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.2.4",
+    "jest": "^27.3.1",
+    "tsd": "^0.30.7",
+    "typescript": "^5.2.2"
   },
   "dependencies": {}
 }

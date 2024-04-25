@@ -1,3 +1,4 @@
+export * from "./const";
 /**
  * @typedef {object} SignerOptions
  * @prop {string} [passphrase]

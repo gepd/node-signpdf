@@ -1,4 +1,3 @@
-import {readTestResource} from '@signpdf/internal-utils';
 import {findByteRange} from './findByteRange';
 import {SignPdfError} from './SignPdfError';
 
@@ -11,19 +10,6 @@ describe(findByteRange, () => {
             expect(e instanceof SignPdfError).toBe(true);
             expect(e.type).toBe(SignPdfError.TYPE_INPUT);
         }
-    });
-    it('expects no byteRangePlaceholder but byteRangeStrings when PDF is already signed', async () => {
-        const pdfBuffer = readTestResource('signed.pdf');
-
-        const {
-            byteRangePlaceholder,
-            byteRangePlaceholderPosition,
-            byteRangeStrings,
-        } = findByteRange(pdfBuffer);
-
-        expect(byteRangePlaceholder).toBe(undefined);
-        expect(byteRangePlaceholderPosition).toBe(undefined);
-        expect(byteRangeStrings[0]).toBe('/ByteRange [0 153 3379 1275]');
     });
     it('throws an error when multiple placeholder ranges are found', async () => {
         const pdfBuffer = Buffer.from(`

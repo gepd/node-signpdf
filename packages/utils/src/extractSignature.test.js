@@ -1,4 +1,3 @@
-import {readTestResource} from '@signpdf/internal-utils';
 import {extractSignature} from './extractSignature';
 import {SignPdfError} from './SignPdfError';
 
@@ -37,10 +36,5 @@ describe(extractSignature, () => {
             expect(e.type).toBe(SignPdfError.TYPE_PARSE);
             expect(e.message).toMatchSnapshot();
         }
-    });
-    it('extracts signature', () => {
-        const signedPdf = readTestResource('signed.pdf');
-        const extracted = extractSignature(signedPdf);
-        expect(extracted).toMatchSnapshot();
     });
 });

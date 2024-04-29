@@ -1,2 +1,30 @@
 export * from "./const";
 export * from "./signpdf";
+
+import { SignPdf, SignPdfError, Signer } from "./signpdf";
+import {
+  DEFAULT_SIGNATURE_LENGTH,
+  DEFAULT_BYTE_RANGE_PLACEHOLDER,
+  SUBFILTER_ADOBE_PKCS7_DETACHED,
+  SUBFILTER_ADOBE_PKCS7_SHA1,
+  SUBFILTER_ADOBE_X509_SHA1,
+  SUBFILTER_ETSI_CADES_DETACHED,
+  SIG_FLAGS,
+  ANNOTATION_FLAGS,
+} from "./const";
+
+const defaultExport = {
+  DEFAULT_SIGNATURE_LENGTH,
+  DEFAULT_BYTE_RANGE_PLACEHOLDER,
+  SUBFILTER_ADOBE_PKCS7_DETACHED,
+  SUBFILTER_ADOBE_PKCS7_SHA1,
+  SUBFILTER_ADOBE_X509_SHA1,
+  SUBFILTER_ETSI_CADES_DETACHED,
+  SIG_FLAGS,
+  ANNOTATION_FLAGS,
+  SignPdf,
+  SignPdfError,
+  Signer,
+};
+
+export default defaultExport;

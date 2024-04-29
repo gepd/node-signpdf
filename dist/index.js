@@ -16,3 +16,19 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./const"), exports);
 __exportStar(require("./signpdf"), exports);
+var signpdf_1 = require("./signpdf");
+var const_1 = require("./const");
+var defaultExport = {
+    DEFAULT_SIGNATURE_LENGTH: const_1.DEFAULT_SIGNATURE_LENGTH,
+    DEFAULT_BYTE_RANGE_PLACEHOLDER: const_1.DEFAULT_BYTE_RANGE_PLACEHOLDER,
+    SUBFILTER_ADOBE_PKCS7_DETACHED: const_1.SUBFILTER_ADOBE_PKCS7_DETACHED,
+    SUBFILTER_ADOBE_PKCS7_SHA1: const_1.SUBFILTER_ADOBE_PKCS7_SHA1,
+    SUBFILTER_ADOBE_X509_SHA1: const_1.SUBFILTER_ADOBE_X509_SHA1,
+    SUBFILTER_ETSI_CADES_DETACHED: const_1.SUBFILTER_ETSI_CADES_DETACHED,
+    SIG_FLAGS: const_1.SIG_FLAGS,
+    ANNOTATION_FLAGS: const_1.ANNOTATION_FLAGS,
+    SignPdf: signpdf_1.SignPdf,
+    SignPdfError: signpdf_1.SignPdfError,
+    Signer: signpdf_1.Signer,
+};
+exports.default = defaultExport;

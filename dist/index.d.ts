@@ -1,6 +1,5 @@
-export * from "./const";
 export * from "./signpdf";
-import { SignPdf, SignPdfError, Signer } from "./signpdf";
+import { SignPdf, SignPdfError } from "./signpdf";
 declare const defaultExport: {
     DEFAULT_SIGNATURE_LENGTH: number;
     DEFAULT_BYTE_RANGE_PLACEHOLDER: string;
@@ -23,7 +22,6 @@ declare const defaultExport: {
     };
     SignPdf: typeof SignPdf;
     SignPdfError: typeof SignPdfError;
-    Signer: typeof Signer;
 };
 export default defaultExport;
 //# sourceMappingURL=index.d.ts.map

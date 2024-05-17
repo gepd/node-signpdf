@@ -1,19 +1,26 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.removeTrailingNewLine = void 0;
-var SignPdfError_1 = require("./SignPdfError");
+
+var _SignPdfError = require("./SignPdfError");
+
 /**
  * Removes a trailing character if it is the one passed as the second parameter.
  * @param {Buffer} pdf
  * @param {string} character
  * @returns {Buffer}
  */
-var sliceLastChar = function (pdf, character) {
-    var lastChar = pdf.subarray(pdf.length - 1).toString();
-    if (lastChar === character) {
-        return pdf.subarray(0, pdf.length - 1);
-    }
-    return pdf;
+const sliceLastChar = (pdf, character) => {
+  const lastChar = pdf.subarray(pdf.length - 1).toString();
+
+  if (lastChar === character) {
+    return pdf.subarray(0, pdf.length - 1);
+  }
+
+  return pdf;
 };
 /**
  * Removes a trailing new line if there is such.
@@ -22,17 +29,23 @@ var sliceLastChar = function (pdf, character) {
  * @param {Buffer} pdf
  * @returns {Buffer}
  */
-var removeTrailingNewLine = function (pdf) {
-    if (!(pdf instanceof Buffer)) {
-        throw new SignPdfError_1.SignPdfError('PDF expected as Buffer.', SignPdfError_1.SignPdfError.TYPE_INPUT);
-    }
-    var output = pdf;
-    output = sliceLastChar(output, '\n');
-    output = sliceLastChar(output, '\r');
-    var lastLine = output.subarray(output.length - 6).toString();
-    if (lastLine !== '\n%%EOF' && lastLine !== '\r%%EOF') {
-        throw new SignPdfError_1.SignPdfError('A PDF file must end with an EOF line.', SignPdfError_1.SignPdfError.TYPE_PARSE);
-    }
-    return output;
+
+
+const removeTrailingNewLine = pdf => {
+  if (!(pdf instanceof Buffer)) {
+    throw new _SignPdfError.SignPdfError('PDF expected as Buffer.', _SignPdfError.SignPdfError.TYPE_INPUT);
+  }
+
+  let output = pdf;
+  output = sliceLastChar(output, '\n');
+  output = sliceLastChar(output, '\r');
+  const lastLine = output.subarray(output.length - 6).toString();
+
+  if (lastLine !== '\n%%EOF' && lastLine !== '\r%%EOF') {
+    throw new _SignPdfError.SignPdfError('A PDF file must end with an EOF line.', _SignPdfError.SignPdfError.TYPE_PARSE);
+  }
+
+  return output;
 };
+
 exports.removeTrailingNewLine = removeTrailingNewLine;

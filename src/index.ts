@@ -1,7 +1,6 @@
-export * from "./const";
 export * from "./signpdf";
 
-import { SignPdf, SignPdfError, Signer } from "./signpdf";
+import { SignPdf, SignPdfError } from "./signpdf";
 import {
   DEFAULT_SIGNATURE_LENGTH,
   DEFAULT_BYTE_RANGE_PLACEHOLDER,
@@ -24,7 +23,6 @@ const defaultExport = {
   ANNOTATION_FLAGS,
   SignPdf,
   SignPdfError,
-  Signer,
 };
 
 export default defaultExport;

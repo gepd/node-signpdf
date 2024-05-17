@@ -1,1 +1,1 @@
-{"version":3,"file":"signpdf.d.ts","sourceRoot":"","sources":["../src/signpdf.js"],"names":[],"mappings":"AAQA;;;;GAIG;AAEH;IAEQ,sBAAyB;IAG7B;;;;;;KAMC;IACD,gBANS,MAAM,GAAG,UAAU,GAAG,MAAM,gCAE5B,eAAe,aACf,MAAM,WACN,MAAM;;;;MAmFd;CACJ;;;;iBAlGS,MAAM;wBACN,OAAO;;uBAPI,UAAU;6BADJ,gBAAgB"}
+{"version":3,"file":"signpdf.d.ts","sourceRoot":"","sources":["../src/signpdf.js"],"names":[],"mappings":";;;AAUA;IAEQ,6BAA0D;IAC1D,sBAAyB;IAG7B,qEA0KC;CACJ"}

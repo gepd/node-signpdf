@@ -1,11 +1,10 @@
-import {
-    SignPdfError,
+import SignPdfError, {
     ERROR_TYPE_UNKNOWN,
     ERROR_TYPE_INPUT,
     ERROR_TYPE_PARSE,
 } from './SignPdfError';
 
-describe(SignPdfError, () => {
+describe('SignPdfError', () => {
     it('SignPdfError extends Error', () => {
         const instance = new SignPdfError('Whatever message');
         expect(instance instanceof Error).toBe(true);

@@ -1,80 +1,18 @@
 # CHANGELOG
 
-## [3.2.4]
-
-* [placeholder-pdf-lib] Fix typing for `pdf-lib`'s `PDFPage`.
-* [placeholder-pdf-lib] Correctly noted that either `pdfDoc` or `pdfPage` is required, not both.
-* Introduced `tsd` to verify the types that we generate.
-
-## [3.2.3]
-
-* [examples] Run linting on examples;
-* [placeholder-plain] Fix ability to add a placeholder to a file that contains the "trailer" keyword in plain text;
-* Bumped version of ip, punycode and sshpk.
-
-## [3.2.2]
-
-* Zero-change version. Lerna versioning was messed up with `lerna publish from-package`.
-
-## [3.2.1]
-
-* [signer-p12] Fixed JSDoc on the sign() method.
-
-## [3.2.0]
-
-* [utils] Introduced `convertBuffer()` to allow inputs as `Buffer`, `Uint8Array` or `string`;
-* [utils] The `Signer` abstract class accepts an optional `signingTime`;
-* [utils] `removeTrailingNewLine` would works for files with `\r`, `\n` or `\r\n`;
-
-* [signpdf] Accepts `Buffer`, `Uint8Array` or `string` as input;
-
-* [signer-p12] Accepts `Buffer`, `Uint8Array` or `string` as input;
-* [signer-p12] Respects `signingTime` as abstracted in `Signer`;
-
-* [placeholder-pdf-lib] Accepts either a `PDFDoc` or a `PDFPage` to allow adding the placeholder to a specific page rather than always the first one;
-* [placeholder-pdf-lib] Accepts `signingTime`;
-* [placeholder-pdf-lib] Includes an `AP` appearance stream for PDF/A compliance;
-* [placeholder-pdf-lib] Accepts `appName` and includes it in `Prop_Build` to allow describing the signing application;
-* [placeholder-pdf-lib] Does not require `{useObjectStreams: false}`;
-
-* [placeholder-pdfkit] Accepts `signingTime`;
-* [placeholder-pdfkit] Accepts `appName` and includes it in `Prop_Build` to allow describing the signing application;
-
-* [placeholder-pdfkit010] Accepts `signingTime`;
-* [placeholder-pdfkit010] Accepts `appName` and includes it in `Prop_Build` to allow describing the signing application;
-
-* [placeholder-plain] Accepts `signingTime`;
-* [placeholder-plain] Accepts `appName` and includes it in `Prop_Build` to allow describing the signing application;
-
-* Bumped version of follow-redirects;
-
-## [3.1.0]
-
-* [placeholder-pdfkit] Introduce the package that uses PDFKit > 0.10 for adding a placeholder;
-
-## [3.1.0]
-
-* [utils] Added `SIG_FLAGS` and `ANNOTATION_FLAGS` to improve readability;
-* [utils] Reworked `findByteRange` to match in more cases where it was incompatible so far (it didn't allow optional spaces in the array).
-* [placeholder-pdfkit010] Uses `SIG_FLAGS` and `ANNOTATION_FLAGS` instead of magic numbers;
-* [placeholder-pdfkit010] Allow passing in `widgetRect` to override the default `[0, 0, 0, 0]` one;
-* [placeholder-plain] Allow passing in `widgetRect` to override the default `[0, 0, 0, 0]` one;
-* [placeholder-pdf-lib] Introduce the package that uses PDF-LIB for adding a placeholder;
-* [signpdf] Use the BR position `findByteRange` provides to spare a search for it;
-* [signpdf] Reexports the `Signer` base (abstract) class and `SignPdfError`;
-* [examples] Introduce [an example that provides a visible widget](packages/examples/src/pdfkit010-with-visual.js) (implemented with pdfkit);
-* [examples] Introduce [a `placeholder-pdf-lib` example](packages/examples/src/pdf-lib.js);
-* Bumped version of axios;
-
 ## [3.0.0]
 
-* Deprecating `node-signpdf` to be replaced by the `@signpdf` scoped packages;
+**node-signpdf is DEPRECATAED**
+
+It is being replaced by the `@signpdf` scoped packages which introduces:
+
 * Split the helpers into separate packages `@signpdf/placeholder-pdfkit010` and `@signpdf/placeholder-plain`;
 * Decoupled the signing algorythm and the PDF signing process. Now `@signpdf/signpdf` understands PDFs and `@signpdf/signer-p12` understands P12 and `node-forge`;
 * sign() is now async to allow for hooking different signers;
-* placeholder helpers now require `contactInfo`, `location` and `name` which used to be optional;
 * Introduced examples in `packages/examples`;
 * Introduced more types declarations through TS and JSDoc;
+
+It keeps the same [GitHub repo](https://github.com/vbuch/node-signpdf) but is published differently **[in npm](https://www.npmjs.com/search?q=%40signpdf)**.
 
 ## [2.0.0]
 

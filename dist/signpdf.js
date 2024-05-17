@@ -1,87 +1,196 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignPdf = exports.SignPdfError = exports.Signer = void 0;
-var convertBuffer_1 = require("./convertBuffer");
-var removeTrailingNewLine_1 = require("./removeTrailingNewLine");
-var findByteRange_1 = require("./findByteRange");
-var SignPdfError_1 = require("./SignPdfError");
-Object.defineProperty(exports, "SignPdfError", { enumerable: true, get: function () { return SignPdfError_1.SignPdfError; } });
-var Signer_1 = require("./Signer");
-Object.defineProperty(exports, "Signer", { enumerable: true, get: function () { return Signer_1.Signer; } });
-/**
- * @typedef {object} SignerOptions
- * @prop {string} [passphrase]
- * @prop {boolean} [asn1StrictParsing]
- */
-var SignPdf = /** @class */ (function () {
-    function SignPdf() {
-        this.lastSignature = null;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {
+  SignPdf: true,
+  SignPdfError: true
+};
+exports.SignPdf = void 0;
+Object.defineProperty(exports, "SignPdfError", {
+  enumerable: true,
+  get: function () {
+    return _SignPdfError.default;
+  }
+});
+exports.default = void 0;
+
+var _nodeForge = _interopRequireDefault(require("node-forge"));
+
+var _SignPdfError = _interopRequireDefault(require("./SignPdfError"));
+
+var _helpers = require("./helpers");
+
+Object.keys(_helpers).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _helpers[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _helpers[key];
     }
-    /**
-   * @param {Buffer | Uint8Array | string} pdfBuffer
-   * @param {Boolean} forhash
-   * @param {ArrayBufferLike} signature
-   * @param {number} phlength
-   * @param {number} bRange
-   */
-    SignPdf.prototype.sign = function (pdfBuffer, forhash, signature, phlength, bRange) {
-        if (signature === void 0) { signature = null; }
-        if (phlength === void 0) { phlength = 0; }
-        if (bRange === void 0) { bRange = null; }
-        if (forhash) {
-            if (!(pdfBuffer instanceof Buffer)) {
-                throw new SignPdfError_1.SignPdfError('PDF expected as Buffer.', SignPdfError_1.SignPdfError.TYPE_INPUT);
-            }
-            var pdf_1 = (0, removeTrailingNewLine_1.removeTrailingNewLine)((0, convertBuffer_1.convertBuffer)(pdfBuffer, 'PDF'));
-            // Find the ByteRange placeholder.
-            var _a = (0, findByteRange_1.findByteRange)(pdf_1), byteRangePlaceholder = _a.byteRangePlaceholder, byteRangePlaceholderPosition = _a.byteRangePlaceholderPosition;
-            if (!byteRangePlaceholder) {
-                throw new SignPdfError_1.SignPdfError('No ByteRangeStrings found within PDF buffer.', SignPdfError_1.SignPdfError.TYPE_PARSE);
-            }
-            // Calculate the actual ByteRange that needs to replace the placeholder.
-            var byteRangeEnd = byteRangePlaceholderPosition + byteRangePlaceholder.length;
-            var contentsTagPos = pdf_1.indexOf('/Contents ', byteRangeEnd);
-            var placeholderPos = pdf_1.indexOf('<', contentsTagPos);
-            var placeholderEnd = pdf_1.indexOf('>', placeholderPos);
-            var placeholderLengthWithBrackets = placeholderEnd + 1 - placeholderPos;
-            var placeholderLength = placeholderLengthWithBrackets - 2;
-            var byteRange = [0, 0, 0, 0];
-            byteRange[1] = placeholderPos;
-            byteRange[2] = byteRange[1] + placeholderLengthWithBrackets;
-            byteRange[3] = pdf_1.length - byteRange[2];
-            var actualByteRange = "/ByteRange [".concat(byteRange.join(' '), "]");
-            actualByteRange += ' '.repeat(byteRangePlaceholder.length - actualByteRange.length);
-            // Replace the /ByteRange placeholder with the actual ByteRange
-            pdf_1 = Buffer.concat([
-                pdf_1.slice(0, byteRangePlaceholderPosition),
-                Buffer.from(actualByteRange),
-                pdf_1.slice(byteRangeEnd),
-            ]);
-            // Remove the placeholder signature
-            pdf_1 = Buffer.concat([
-                pdf_1.slice(0, byteRange[1]),
-                pdf_1.slice(byteRange[2], byteRange[2] + byteRange[3]),
-            ]);
-            return {
-                pdf: pdf_1,
-                placeholderLength: placeholderLength,
-                byteRange1: byteRange[1],
-            };
-        }
-        var pdf = pdfBuffer;
-        var internalSignature = Buffer.from(signature).toString('hex'); // Store the HEXified signature. At least useful in tests.
-        this.lastSignature = internalSignature;
-        // Pad the signature with zeroes so the it is the same length as the placeholder
-        internalSignature += Buffer.from(String.fromCharCode(0).repeat((phlength - internalSignature.length) / 2)).toString('hex');
-        // Place it in the document.
-        pdf = Buffer.concat([
-            pdf.slice(0, bRange),
-            Buffer.from("<".concat(internalSignature, ">")),
-            pdf.slice(bRange),
-        ]); // Magic. Done.
-        return pdf;
+  });
+});
+
+var _const = require("./helpers/const");
+
+Object.keys(_const).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _const[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function () {
+      return _const[key];
+    }
+  });
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class SignPdf {
+  constructor() {
+    this.byteRangePlaceholder = _const.DEFAULT_BYTE_RANGE_PLACEHOLDER;
+    this.lastSignature = null;
+  }
+
+  sign(pdfBuffer, p12Buffer, additionalOptions = {}) {
+    const options = {
+      asn1StrictParsing: false,
+      passphrase: '',
+      ...additionalOptions
     };
-    return SignPdf;
-}());
+
+    if (!(pdfBuffer instanceof Buffer)) {
+      throw new _SignPdfError.default('PDF expected as Buffer.', _SignPdfError.default.TYPE_INPUT);
+    }
+
+    if (!(p12Buffer instanceof Buffer)) {
+      throw new _SignPdfError.default('p12 certificate expected as Buffer.', _SignPdfError.default.TYPE_INPUT);
+    }
+
+    let pdf = (0, _helpers.removeTrailingNewLine)(pdfBuffer); // Find the ByteRange placeholder.
+
+    const {
+      byteRangePlaceholder
+    } = (0, _helpers.findByteRange)(pdf);
+
+    if (!byteRangePlaceholder) {
+      throw new _SignPdfError.default(`Could not find empty ByteRange placeholder: ${byteRangePlaceholder}`, _SignPdfError.default.TYPE_PARSE);
+    }
+
+    const byteRangePos = pdf.indexOf(byteRangePlaceholder); // Calculate the actual ByteRange that needs to replace the placeholder.
+
+    const byteRangeEnd = byteRangePos + byteRangePlaceholder.length;
+    const contentsTagPos = pdf.indexOf('/Contents ', byteRangeEnd);
+    const placeholderPos = pdf.indexOf('<', contentsTagPos);
+    const placeholderEnd = pdf.indexOf('>', placeholderPos);
+    const placeholderLengthWithBrackets = placeholderEnd + 1 - placeholderPos;
+    const placeholderLength = placeholderLengthWithBrackets - 2;
+    const byteRange = [0, 0, 0, 0];
+    byteRange[1] = placeholderPos;
+    byteRange[2] = byteRange[1] + placeholderLengthWithBrackets;
+    byteRange[3] = pdf.length - byteRange[2];
+    let actualByteRange = `/ByteRange [${byteRange.join(' ')}]`;
+    actualByteRange += ' '.repeat(byteRangePlaceholder.length - actualByteRange.length); // Replace the /ByteRange placeholder with the actual ByteRange
+
+    pdf = Buffer.concat([pdf.slice(0, byteRangePos), Buffer.from(actualByteRange), pdf.slice(byteRangeEnd)]); // Remove the placeholder signature
+
+    pdf = Buffer.concat([pdf.slice(0, byteRange[1]), pdf.slice(byteRange[2], byteRange[2] + byteRange[3])]); // Convert Buffer P12 to a forge implementation.
+
+    const forgeCert = _nodeForge.default.util.createBuffer(p12Buffer.toString('binary'));
+
+    const p12Asn1 = _nodeForge.default.asn1.fromDer(forgeCert);
+
+    const p12 = _nodeForge.default.pkcs12.pkcs12FromAsn1(p12Asn1, options.asn1StrictParsing, options.passphrase); // Extract safe bags by type.
+    // We will need all the certificates and the private key.
+
+
+    const certBags = p12.getBags({
+      bagType: _nodeForge.default.pki.oids.certBag
+    })[_nodeForge.default.pki.oids.certBag];
+
+    const keyBags = p12.getBags({
+      bagType: _nodeForge.default.pki.oids.pkcs8ShroudedKeyBag
+    })[_nodeForge.default.pki.oids.pkcs8ShroudedKeyBag];
+
+    const privateKey = keyBags[0].key; // Here comes the actual PKCS#7 signing.
+
+    const p7 = _nodeForge.default.pkcs7.createSignedData(); // Start off by setting the content.
+
+
+    p7.content = _nodeForge.default.util.createBuffer(pdf.toString('binary')); // Then add all the certificates (-cacerts & -clcerts)
+    // Keep track of the last found client certificate.
+    // This will be the public key that will be bundled in the signature.
+
+    let certificate;
+    Object.keys(certBags).forEach(i => {
+      const {
+        publicKey
+      } = certBags[i].cert;
+      p7.addCertificate(certBags[i].cert); // Try to find the certificate that matches the private key.
+
+      if (privateKey.n.compareTo(publicKey.n) === 0 && privateKey.e.compareTo(publicKey.e) === 0) {
+        certificate = certBags[i].cert;
+      }
+    });
+
+    if (typeof certificate === 'undefined') {
+      throw new _SignPdfError.default('Failed to find a certificate that matches the private key.', _SignPdfError.default.TYPE_INPUT);
+    } // Add a sha256 signer. That's what Adobe.PPKLite adbe.pkcs7.detached expects.
+    // Note that the authenticatedAttributes order is relevant for correct
+    // EU signature validation:
+    // https://ec.europa.eu/digital-building-blocks/DSS/webapp-demo/validation
+
+
+    p7.addSigner({
+      key: privateKey,
+      certificate,
+      digestAlgorithm: _nodeForge.default.pki.oids.sha256,
+      authenticatedAttributes: [{
+        type: _nodeForge.default.pki.oids.contentType,
+        value: _nodeForge.default.pki.oids.data
+      }, {
+        type: _nodeForge.default.pki.oids.signingTime,
+        // value can also be auto-populated at signing time
+        // We may also support passing this as an option to sign().
+        // Would be useful to match the creation time of the document for example.
+        value: new Date()
+      }, {
+        type: _nodeForge.default.pki.oids.messageDigest // value will be auto-populated at signing time
+
+      }]
+    }); // Sign in detached mode.
+
+    p7.sign({
+      detached: true
+    }); // Check if the PDF has a good enough placeholder to fit the signature.
+
+    const raw = _nodeForge.default.asn1.toDer(p7.toAsn1()).getBytes(); // placeholderLength represents the length of the HEXified symbols but we're
+    // checking the actual lengths.
+
+
+    if (raw.length * 2 > placeholderLength) {
+      throw new _SignPdfError.default(`Signature exceeds placeholder length: ${raw.length * 2} > ${placeholderLength}`, _SignPdfError.default.TYPE_INPUT);
+    }
+
+    let signature = Buffer.from(raw, 'binary').toString('hex'); // Store the HEXified signature. At least useful in tests.
+
+    this.lastSignature = signature; // Pad the signature with zeroes so the it is the same length as the placeholder
+
+    signature += Buffer.from(String.fromCharCode(0).repeat(placeholderLength / 2 - raw.length)).toString('hex'); // Place it in the document.
+
+    pdf = Buffer.concat([pdf.slice(0, byteRange[1]), Buffer.from(`<${signature}>`), pdf.slice(byteRange[1])]); // Magic. Done.
+
+    return pdf;
+  }
+
+}
+
 exports.SignPdf = SignPdf;
-exports.default = new SignPdf();
+
+var _default = new SignPdf();
+
+exports.default = _default;

@@ -1,5 +1,5 @@
 # RELEASE CHECKLIST
 
-[ ] ./node_modules/.bin/lerna run build
-[ ] Update CHANGELOG
-[ ] ./node_modules/.bin/lerna publish
+**node-signpdf is DEPRECATAED**
+
+Further releases will happen in [@signpdf](https://github.com/vbuch/node-signpdf).

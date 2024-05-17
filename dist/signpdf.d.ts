@@ -1,30 +1,11 @@
-/**
- * @typedef {object} SignerOptions
- * @prop {string} [passphrase]
- * @prop {boolean} [asn1StrictParsing]
- */
+export { default as SignPdfError } from "./SignPdfError";
+export * from "./helpers";
+export * from "./helpers/const";
 export class SignPdf {
+    byteRangePlaceholder: string;
     lastSignature: string;
-    /**
-   * @param {Buffer | Uint8Array | string} pdfBuffer
-   * @param {Boolean} forhash
-   * @param {ArrayBufferLike} signature
-   * @param {number} phlength
-   * @param {number} bRange
-   */
-    sign(pdfBuffer: Buffer | Uint8Array | string, forhash: boolean, signature?: ArrayBufferLike, phlength?: number, bRange?: number): Uint8Array | Buffer | {
-        pdf: Buffer;
-        placeholderLength: number;
-        byteRange1: number;
-    };
+    sign(pdfBuffer: any, p12Buffer: any, additionalOptions?: {}): Buffer;
 }
 declare const _default: SignPdf;
 export default _default;
-export type SignerOptions = {
-    passphrase?: string;
-    asn1StrictParsing?: boolean;
-};
-import { Signer } from './Signer';
-import { SignPdfError } from './SignPdfError';
-export { Signer, SignPdfError };
 //# sourceMappingURL=signpdf.d.ts.map
